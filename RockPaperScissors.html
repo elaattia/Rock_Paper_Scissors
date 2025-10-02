@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rock Paper Scissors – Challenge VS AI</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #e3f2fd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+      padding: 30px 50px;
+      text-align: center;
+      width: 360px;
+    }
+    h1 {
+      color: #1976d2;
+      margin-bottom: 12px;
+    }
+    .game-btn {
+      font-size: 2rem;
+      margin: 18px 12px;
+      padding: 10px 22px;
+      border: none;
+      border-radius: 8px;
+      background: #1976d2;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .game-btn:hover {
+      background: #1565c0;
+    }
+    .score, .round, .result, .final {
+      margin-top: 16px;
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    .final {
+      color: #2e7d32;
+      font-size: 1.4rem;
+      margin-top: 24px;
+    }
+    .choices {
+      font-size: 1.8rem;
+      margin-top: 10px;
+    }
+    button.restart {
+      background: #43a047;
+      margin-top: 20px;
+      font-size: 1rem;
+      padding: 8px 16px;
+    }
+    button.restart:hover {
+      background: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>✊ 🖐️ ✌️ Rock Paper Scissors VS AI</h1>
+    <div class="round" id="round"></div>
+    <div class="score" id="score"></div>
+    <div class="choices" id="choices"></div>
+    <div>
+      <button class="game-btn" onclick="userPlay('rock')">✊ Rock</button>
+      <button class="game-btn" onclick="userPlay('paper')">🖐️ Paper</button>
+      <button class="game-btn" onclick="userPlay('scissors')">✌️ Scissors</button>
+    </div>
+    <div class="result" id="result"></div>
+    <div class="final" id="finalResult"></div>
+    <button class="restart" onclick="restartGame()" style="display:none;" id="restartBtn">Restart</button>
+  </div>
+
+  <script>
+    let userScore = 0;
+    let aiScore = 0;
+    let currentRound = 1;
+    const totalRounds = 3;
+    const choices = ['rock', 'paper', 'scissors'];
+
+    function updateDisplay(msg="") {
+      document.getElementById("round").innerText = `Round: ${currentRound} / ${totalRounds}`;
+      document.getElementById("score").innerText = `Your Score: ${userScore} | AI Score: ${aiScore}`;
+      document.getElementById("result").innerText = msg;
+      document.getElementById("choices").innerText = "";
+      document.getElementById("finalResult").innerText = "";
+      document.getElementById("restartBtn").style.display = "none";
+    }
+
+    function userPlay(userChoice) {
+      if (currentRound > totalRounds) return;
+      let aiChoice = choices[Math.floor(Math.random() * 3)];
+      let msg = `You chose: ${emoji(userChoice)} | AI chose: ${emoji(aiChoice)}`;
+      document.getElementById("choices").innerText = msg;
+
+      let outcome = determineWinner(userChoice, aiChoice);
+
+      if (outcome === "win") {
+        userScore += 1;
+        aiScore -= 1;
+        document.getElementById("result").innerText = "✅ You win this round!";
+      } else if (outcome === "lose") {
+        userScore -= 1;
+        aiScore += 1;
+        document.getElementById("result").innerText = "❌ You lost this round!";
+      } else {
+        document.getElementById("result").innerText = "🤝 Draw!";
+      }
+
+      currentRound += 1;
+
+      if (currentRound > totalRounds) {
+        setTimeout(showFinalResult, 700);
+      } else {
+        updateDisplay();
+      }
+    }
+
+    function determineWinner(user, ai) {
+      if (user === ai) return "draw";
+      if ((user === "rock" && ai === "scissors") ||
+          (user === "scissors" && ai === "paper") ||
+          (user === "paper" && ai === "rock")) {
+        return "win";
+      }
+      return "lose";
+    }
+
+    function emoji(choice) {
+      if (choice === "rock") return "✊";
+      if (choice === "paper") return "🖐️";
+      if (choice === "scissors") return "✌️";
+      return "";
+    }
+
+    function showFinalResult() {
+      let resultMsg = "";
+      if (userScore > aiScore) {
+        resultMsg = "🏆 Congratulations! You WIN against AI!";
+      } else if (userScore < aiScore) {
+        resultMsg = "😎 AI wins! Better luck next time!";
+      } else {
+        resultMsg = "🤝 It's a DRAW!";
+      }
+      document.getElementById("finalResult").innerText = resultMsg;
+      document.getElementById("restartBtn").style.display = "inline-block";
+    }
+
+    function restartGame() {
+      userScore = 0;
+      aiScore = 0;
+      currentRound = 1;
+      updateDisplay();
+      document.getElementById("choices").innerText = "";
+      document.getElementById("result").innerText = "";
+      document.getElementById("finalResult").innerText = "";
+      document.getElementById("restartBtn").style.display = "none";
+    }
+
+    // Initialize display
+    updateDisplay();
+  </script>
+</body>
+</html>

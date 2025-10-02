@@ -1,0 +1,28 @@
+# Environnements virtuels
+rps-env/
+venv/
+.env/
+ENV/
+env/
+
+# Python cache et compilés
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+
+# VS Code settings
+.vscode/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Paquets / distributions
+*.egg-info/
+dist/
+build/
